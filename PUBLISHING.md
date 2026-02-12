@@ -21,7 +21,7 @@ This guide explains how to publish your **Multi-AI Edge Extension** to the Chrom
     *   **Category**: "Productivity" or "Search Tools".
     *   **Language**: English (United States) or Turkish.
     *   **Graphics**:
-        *   **Icon**: Upload `public/icon128.png` (128x128).
+        *   **Icon**: Upload `public/icon512.png` (512x512).
         *   **Screenshots**: Upload screenshots from `docs/screenshots` folder (1280x800 recommended).
         *   **Marquee**: Optional but recommended (440x280).
 6.  **Privacy Practices**:
