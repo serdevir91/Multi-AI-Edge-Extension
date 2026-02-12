@@ -1,0 +1,55 @@
+{
+    "manifest_version": 3,
+    "name": "Multi-AI Edge Extension",
+    "version": "1.0.0",
+    "description": "Access Gemini, ChatGPT, and Claude with advanced screenshot and PDF capabilities.",
+    "permissions": [
+        "storage",
+        "unlimitedStorage",
+        "activeTab",
+        "scripting",
+        "sidePanel",
+        "tabs",
+        "debugger",
+        "clipboardRead"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "pdf.worker.min.mjs"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "index.html"
+    },
+    "side_panel": {
+        "default_path": "index.html"
+    },
+    "background": {
+        "service_worker": "src/background/index.ts",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "src/content/index.ts"
+            ]
+        }
+    ],
+    "icons": {
+        "16": "public/icon16.png",
+        "48": "public/icon48.png",
+        "128": "public/icon128.png"
+    }
+}
