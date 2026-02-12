@@ -4,12 +4,14 @@ import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Send, Paperclip, Image as ImageIcon, Bot, User, Loader2, X } from 'lucide-react';
 import { useChat } from './hooks/useChat';
+import { useLanguage } from './hooks/useLanguage';
 import { ModelSelector } from './components/ModelSelector';
 import type { Attachment } from './lib/ai/types';
 import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
 
 function App() {
+  const { t } = useLanguage();
   const [provider, setProvider] = useState<string>('gemini');
   const [input, setInput] = useState('');
   const {
@@ -274,7 +276,7 @@ function App() {
               <Bot size={28} />
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              <b className="text-gray-700 dark:text-gray-300">{provider}</b> ile sohbet başlatın
+              <b className="text-gray-700 dark:text-gray-300">{t('startChatEmpty').replace('{provider}', provider)}</b>
             </div>
           </div>
         ) : (
@@ -394,7 +396,7 @@ function App() {
             <Button
               variant="ghost"
               size="icon"
-              title="Dosya Yükle (PDF, TXT...)"
+              title={t('uploadFile')}
               className="h-8 w-8 rounded-full dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#3c4043]"
               onClick={handleFileUpload}
             >
@@ -403,7 +405,7 @@ function App() {
             <Button
               variant="ghost"
               size="icon"
-              title="Resim Yükle"
+              title={t('uploadImage')}
               className="h-8 w-8 rounded-full dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#3c4043]"
               onClick={handleImageUpload}
             >
@@ -416,7 +418,7 @@ function App() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={`${provider} ile mesaj...`}
+              placeholder={t('messagePlaceholder').replace('{provider}', provider)}
               className="flex-1 h-9 rounded-xl dark:bg-[#282a2c] dark:border-[#3c4043] dark:text-white dark:placeholder-gray-500 text-sm"
               disabled={isLoading}
             />

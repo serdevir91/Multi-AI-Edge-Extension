@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, MessageSquare, Moon, Sun, ChevronLeft, Plus } from 'lucide-react';
+import { Settings, MessageSquare, Moon, Sun, ChevronLeft, Plus, Globe } from 'lucide-react';
 import { Button } from './ui/button';
 import { APIKeyInput } from './Settings/APIKeyInput';
 import { ChatHistory } from './ChatHistory';
 import type { Conversation, CustomProviderConfig, Model } from '../lib/ai/types';
 import { useTheme } from '../hooks/useTheme';
+import { useLanguage } from '../hooks/useLanguage';
 
 interface ChatLayoutProps {
     children: React.ReactNode;
@@ -25,6 +26,7 @@ export function ChatLayout({
 }: ChatLayoutProps) {
     const [sidebarView, setSidebarView] = useState<'none' | 'history' | 'settings'>('none');
     const { theme, toggleTheme } = useTheme();
+    const { t, language, setLanguage } = useLanguage();
     const [customProviders, setCustomProviders] = useState<CustomProviderConfig[]>([]);
     const [newProvider, setNewProvider] = useState({ name: '', baseUrl: '', models: '' });
 
@@ -76,11 +78,11 @@ export function ChatLayout({
                         size="icon"
                         onClick={() => toggleSidebar('history')}
                         className="h-8 w-8 dark:text-gray-400 dark:hover:text-white"
-                        title="Chat History"
+                        title={t('chatHistory')}
                     >
                         <MessageSquare className="h-4 w-4" />
                     </Button>
-                    <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">Multi-AI</span>
+                    <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">{t('appName')}</span>
                 </div>
                 <div className="flex items-center gap-1">
                     <Button
@@ -88,7 +90,7 @@ export function ChatLayout({
                         size="icon"
                         onClick={onNewChat}
                         className="h-8 w-8 dark:text-gray-400 dark:hover:text-white"
-                        title="New Chat"
+                        title={t('newChat')}
                     >
                         <Plus className="h-4 w-4" />
                     </Button>
@@ -97,7 +99,7 @@ export function ChatLayout({
                         size="icon"
                         onClick={() => toggleSidebar('settings')}
                         className="h-8 w-8 dark:text-gray-400 dark:hover:text-white"
-                        title="Settings"
+                        title={t('settings')}
                     >
                         <Settings className="h-4 w-4" />
                     </Button>
@@ -109,7 +111,7 @@ export function ChatLayout({
                 {sidebarView === 'history' && (
                     <aside className="absolute left-0 top-0 bottom-0 w-64 border-r bg-white dark:bg-[#1e1f20] dark:border-[#3c4043] p-3 z-20 shadow-xl overflow-y-auto transition-colors">
                         <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-semibold dark:text-white">Chat History</span>
+                            <span className="text-sm font-semibold dark:text-white">{t('chatHistory')}</span>
                             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setSidebarView('none')}>
                                 <ChevronLeft className="h-4 w-4" />
                             </Button>
@@ -128,27 +130,43 @@ export function ChatLayout({
                 {sidebarView === 'settings' && (
                     <aside className="absolute right-0 top-0 bottom-0 w-72 border-l bg-white dark:bg-[#1e1f20] dark:border-[#3c4043] p-4 z-20 shadow-xl overflow-y-auto transition-colors">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm font-semibold dark:text-white">Settings</span>
+                            <span className="text-sm font-semibold dark:text-white">{t('settings')}</span>
                             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setSidebarView('none')}>
                                 <ChevronLeft className="h-4 w-4 rotate-180" />
                             </Button>
                         </div>
 
+                        {/* Language Selector */}
+                        <div className="mb-4 p-3 rounded-lg bg-gray-50 dark:bg-[#282a2c]">
+                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{t('language')}</div>
+                            <div className="flex items-center gap-2">
+                                <Globe className="h-4 w-4 text-gray-500" />
+                                <select
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value as any)}
+                                    className="w-full bg-white dark:bg-[#1e1f20] border dark:border-[#3c4043] text-sm rounded px-2 py-1 outline-none dark:text-gray-200"
+                                >
+                                    <option value="tr">Türkçe</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                        </div>
+
                         {/* Theme Toggle */}
                         <div className="mb-4 p-3 rounded-lg bg-gray-50 dark:bg-[#282a2c]">
-                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Appearance</div>
+                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{t('appearance')}</div>
                             <button
                                 onClick={toggleTheme}
                                 className="flex items-center gap-2 w-full px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#3c4043] text-sm transition-colors"
                             >
                                 {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                                <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                                <span>{theme === 'dark' ? t('lightMode') : t('darkMode')}</span>
                             </button>
                         </div>
 
                         {/* API Keys */}
                         <div className="space-y-3 mb-4">
-                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Built-in Providers</div>
+                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('builtInProviders')}</div>
                             <APIKeyInput service="gemini" label="Gemini API Key" />
                             <APIKeyInput service="openai" label="OpenAI API Key" />
                             <APIKeyInput service="claude" label="Claude API Key" />
@@ -160,7 +178,7 @@ export function ChatLayout({
 
                         {/* Custom Providers */}
                         <div className="space-y-3 mb-4">
-                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Custom Providers</div>
+                            <div className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('customProviders')}</div>
 
                             {customProviders.map(cp => (
                                 <div key={cp.id} className="p-2 rounded-lg bg-gray-50 dark:bg-[#282a2c] text-xs space-y-1">
@@ -169,7 +187,7 @@ export function ChatLayout({
                                         <button
                                             onClick={() => removeCustomProvider(cp.id)}
                                             className="text-red-400 hover:text-red-500 text-[10px]"
-                                        >Remove</button>
+                                        >{t('remove')}</button>
                                     </div>
                                     <div className="text-gray-400 truncate">{cp.baseUrl}</div>
                                     <APIKeyInput service={cp.id} label={`${cp.name} API Key`} />
@@ -177,23 +195,23 @@ export function ChatLayout({
                             ))}
 
                             <div className="p-3 rounded-lg bg-gray-50 dark:bg-[#282a2c] space-y-2">
-                                <div className="text-xs font-medium dark:text-gray-300">Add Custom Provider</div>
+                                <div className="text-xs font-medium dark:text-gray-300">{t('addCustomProvider')}</div>
                                 <input
                                     value={newProvider.name}
                                     onChange={e => setNewProvider(p => ({ ...p, name: e.target.value }))}
-                                    placeholder="Provider Name"
+                                    placeholder={t('providerName')}
                                     className="w-full px-2 py-1.5 text-xs rounded border bg-white dark:bg-[#1e1f20] dark:border-[#3c4043] dark:text-white outline-none focus:ring-1 focus:ring-blue-500"
                                 />
                                 <input
                                     value={newProvider.baseUrl}
                                     onChange={e => setNewProvider(p => ({ ...p, baseUrl: e.target.value }))}
-                                    placeholder="Base URL (e.g. http://localhost:1234/v1)"
+                                    placeholder={t('baseUrl') + " (e.g. http://localhost:1234/v1)"}
                                     className="w-full px-2 py-1.5 text-xs rounded border bg-white dark:bg-[#1e1f20] dark:border-[#3c4043] dark:text-white outline-none focus:ring-1 focus:ring-blue-500"
                                 />
                                 <input
                                     value={newProvider.models}
                                     onChange={e => setNewProvider(p => ({ ...p, models: e.target.value }))}
-                                    placeholder="Model IDs (comma separated, optional)"
+                                    placeholder={t('modelIds') + " (comma separated)"}
                                     className="w-full px-2 py-1.5 text-xs rounded border bg-white dark:bg-[#1e1f20] dark:border-[#3c4043] dark:text-white outline-none focus:ring-1 focus:ring-blue-500"
                                 />
                                 <button
@@ -201,13 +219,13 @@ export function ChatLayout({
                                     disabled={!newProvider.name || !newProvider.baseUrl}
                                     className="w-full px-3 py-1.5 text-xs rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
-                                    Add Provider
+                                    {t('addProvider')}
                                 </button>
                             </div>
                         </div>
 
                         <div className="p-2.5 bg-gray-50 dark:bg-[#282a2c] rounded-lg text-[10px] text-gray-500 dark:text-gray-500">
-                            Keys are stored locally in your browser. Custom providers use OpenAI-compatible API format.
+                            Keys are stored locally. Custom providers use OpenAI-compatible API.
                         </div>
                     </aside>
                 )}

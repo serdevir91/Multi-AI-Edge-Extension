@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Eye, EyeOff, Save } from 'lucide-react';
+import { useLanguage } from '../../hooks/useLanguage';
 
 interface APIKeyInputProps {
     service: string;
@@ -9,6 +10,7 @@ interface APIKeyInputProps {
 }
 
 export function APIKeyInput({ service, label }: APIKeyInputProps) {
+    const { t } = useLanguage();
     const [apiKey, setApiKey] = useState('');
     const [showKey, setShowKey] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -39,7 +41,7 @@ export function APIKeyInput({ service, label }: APIKeyInputProps) {
                         type={showKey ? "text" : "password"}
                         value={apiKey}
                         onChange={(e) => { setApiKey(e.target.value); setIsSaved(false); }}
-                        placeholder={`Enter key`}
+                        placeholder={t('enterKey')}
                         className="pr-8 text-xs h-7 dark:bg-[#1e1f20] dark:border-[#3c4043] dark:text-white"
                     />
                     <button

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import type { Model, CustomProviderConfig } from '../lib/ai/types';
 import { cn } from '../lib/utils';
 
+import { useLanguage } from '../hooks/useLanguage';
+
 interface ProviderOption {
     id: string;
     name: string;
@@ -24,6 +26,7 @@ export function ModelSelector({
     availableModels,
     className
 }: ModelSelectorProps) {
+    const { t } = useLanguage();
     const [providers, setProviders] = useState<ProviderOption[]>([
         { id: 'gemini', name: 'Google Gemini' },
         { id: 'openai', name: 'OpenAI' },
@@ -94,7 +97,7 @@ export function ModelSelector({
                 className="h-7 rounded-md text-xs border border-gray-200 dark:border-[#3c4043] bg-white dark:bg-[#282a2c] text-gray-900 dark:text-gray-200 focus:ring-1 focus:ring-blue-500 outline-none px-2 py-1 cursor-pointer max-w-[160px]"
                 disabled={availableModels.length === 0}
             >
-                {availableModels.length === 0 && <option value="">Loading...</option>}
+                {availableModels.length === 0 && <option value="">{t('loading')}</option>}
                 {availableModels.map((m) => (
                     <option key={m.id} value={m.id}>{m.name}</option>
                 ))}

@@ -7,6 +7,7 @@
 ## ✨ Features
 
 -   **🤖 Multi-Model Support**: Switch seamlessly between **Google Gemini**, **OpenAI (GPT-4o)**, **Claude 3.5**, **Groq**, **Perplexity**, **Mistral**, and **DeepSeek**.
+-   **🌍 Multi-Language Support**: Fully localized in **English** and **Turkish**. Switch languages instantly from settings.
 -   **📸 Advanced Screenshotting**:
     -   **Auto-Paste**: Simply press `Print Screen` and click on the chat panel. The extension automatically detects and attaches the screenshot.
     -   **Manual Paste**: Support for `Ctrl+V` to paste images directly.
